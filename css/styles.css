@@ -97,3 +97,11 @@ footer {
   padding: 10px;
   text-align: center;
 }
+.buttons-container {
+  position: fixed; /* Posição fixa em relação à janela do navegador */
+  bottom: 0; /* Alinha o elemento na parte inferior */
+  width: 100%; /* Ocupa toda a largura */
+  background-color: rgba(255, 255, 255, 0.9); /* Fundo semitransparente */
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Sombra para destaque */
+}
