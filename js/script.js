@@ -105,11 +105,13 @@ function renderButtons() {
   var liRandomGameButton = renderRandomGameButton();
   var liSaveGameButton = renderSaveGameButton();
   var liClearSavedGamesButton = renderClearSavedGamesButton();
+  var liExportGamesButton = renderExportGamesButton();
 
   ulButtons.appendChild(liNewGameButton);
   ulButtons.appendChild(liRandomGameButton);
   ulButtons.appendChild(liSaveGameButton);
   ulButtons.appendChild(liClearSavedGamesButton);
+  ulButtons.appendChild(liExportGamesButton);
 
   divButtons.appendChild(ulButtons);
 }
@@ -167,6 +169,42 @@ function renderClearSavedGamesButton() {
   return li;
 }
 
+function renderExportGamesButton() {
+  var li = document.createElement('li');
+  li.classList.add('button');
+
+  var button = document.createElement('button');
+  button.textContent = 'Exportar jogos salvos';
+  button.addEventListener('click', exportSavedGames);
+
+  li.appendChild(button);
+
+  return li;
+}
+
+function exportSavedGames() {
+  if (state.savedGames.length === 0) {
+    alert('Não há jogos salvos para exportar.');
+    return;
+  }
+
+  var csvContent = "data:text/csv;charset=utf-8,";
+  csvContent += "Jogo\n";
+
+  state.savedGames.forEach(function(game) {
+    var row = game.join(",");
+    csvContent += row + "\n";
+  });
+
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "jogos_salvos_quina.csv");
+  document.body.appendChild(link); // Required for FF
+
+  link.click(); // This will download the CSV file
+}
+
 function generateRandomGame() {
   state.currentNumbers = [];
 
@@ -177,7 +215,8 @@ function generateRandomGame() {
     }
   }
 
-  render();
+  renderNumbers();
+  renderButtons();
 }
 
 function saveGame() {
@@ -191,7 +230,7 @@ function saveGame() {
 function clearSavedGames() {
   state.savedGames = [];
   writeLocalStorage();
-  render();
+  renderSavedGames();
 }
 
 function renderSavedGames() {
